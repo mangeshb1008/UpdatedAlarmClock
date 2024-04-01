@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alarm Clock</title>
+    <link rel="stylesheet" href="alarm.css">
+</head>
+<body>
+    <div class="clock">
+        <div class="display" id="display">00:00:00</div>
+    </div>
+
+    <div id="setalram">        
+        <input type="time" id="alarmTime" />
+
+        <div class="controls">
+            <button id="setAlarmBtn">Set Alarm</button>
+            <button id="clearAlarmBtn">Clear Alarm</button>
+        </div>
+    </div>
+    
+    <script>
+        var alarmTimeout = null;
+
+        function Clock() {
+            var now = new Date();
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('display').textContent = hours + ':' + minutes + ':' + seconds;
+        }
+    
+        setInterval(Clock, 1000);
+    
+        function setAlarm() {
+            var alarmTimeInput = document.getElementById('alarmTime').value;
+            var alarmTime = new Date();
+            alarmTime.setHours(parseInt(alarmTimeInput.split(':')[0]));
+            alarmTime.setMinutes(parseInt(alarmTimeInput.split(':')[1]));
+            alarmTime.setSeconds(0);
+    
+            var now = new Date();
+    
+            var timeToAlarm = alarmTime.getTime() - now.getTime();
+            if (timeToAlarm > 0) {
+                alarmTimeout = setTimeout(function() {
+                    alert('Alarm!');
+                }, timeToAlarm);
+            }
+        }
+    
+        function clearAlarm() {
+            clearTimeout(alarmTimeout);
+            document.getElementById('alarmTime').value = ''; // Clear the alarm time input
+        }
+
+        document.getElementById('setAlarmBtn').addEventListener('click', setAlarm);
+        document.getElementById('clearAlarmBtn').addEventListener('click', clearAlarm);
+    </script>
+</body>
+</html>
